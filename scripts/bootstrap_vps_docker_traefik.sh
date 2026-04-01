@@ -61,6 +61,10 @@ usermod -aG docker "${DEPLOY_USER}" || true
 echo "==> Preparing app directory"
 mkdir -p "$(dirname "${APP_DIR}")"
 chown "${DEPLOY_USER}:${DEPLOY_GROUP}" "$(dirname "${APP_DIR}")"
+if [[ -d "${APP_DIR}" ]]; then
+  chown -R "${DEPLOY_USER}:${DEPLOY_GROUP}" "${APP_DIR}"
+fi
+sudo -u "${DEPLOY_USER}" git config --global --add safe.directory "${APP_DIR}"
 
 if [[ -d "${APP_DIR}/.git" ]]; then
   echo "==> Updating existing repo in ${APP_DIR}"
