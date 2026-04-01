@@ -1,0 +1,25 @@
+services:
+  ficha:
+    build: .
+    image: ficha-prd:latest
+    container_name: ficha_prd_app
+    restart: always
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=web
+      - traefik.http.routers.ficha_prd_http.rule=Host(`${DOMAIN:-prd.dnnicolini.com}`)
+      - traefik.http.routers.ficha_prd_http.entrypoints=web
+      - traefik.http.routers.ficha_prd_http.middlewares=ficha_prd_https_redirect
+      - traefik.http.middlewares.ficha_prd_https_redirect.redirectscheme.scheme=https
+      - traefik.http.routers.ficha_prd_https.rule=Host(`${DOMAIN:-prd.dnnicolini.com}`)
+      - traefik.http.routers.ficha_prd_https.entrypoints=websecure
+      - traefik.http.routers.ficha_prd_https.tls=true
+      - traefik.http.routers.ficha_prd_https.tls.certresolver=${TRAEFIK_CERTRESOLVER:-le}
+      - traefik.http.routers.ficha_prd_https.service=ficha_prd_svc
+      - traefik.http.services.ficha_prd_svc.loadbalancer.server.port=8000
+    networks:
+      - web
+
+networks:
+  web:
+    external: true
