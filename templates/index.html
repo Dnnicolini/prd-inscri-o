@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Preencher Ficha PRD</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <div class="bg-shape bg-shape-a"></div>
+  <div class="bg-shape bg-shape-b"></div>
+
+  <main class="page">
+    <section class="hero">
+      <p class="eyebrow">FICHA PARTIDO PRD</p>
+      <h1>Preenchimento Automático de PDF</h1>
+      <p class="hero-copy">
+        Digite os dados uma única vez e o sistema gera a ficha pronta para imprimir,
+        já preenchida nas duas vias do documento.
+      </p>
+    </section>
+
+    <section class="panel">
+      <form method="post" action="/gerar-pdf" target="_blank" class="form-grid" id="ficha-form">
+        <input type="hidden" name="municipio_estado" id="municipio_estado">
+
+        <label>
+          Nome
+          <input name="nome" required placeholder="Nome completo">
+        </label>
+        <label>
+          Data de Nascimento
+          <input type="date" name="data_nasc">
+        </label>
+
+        <label class="col-2">
+          Nome Social
+          <input name="nome_social" placeholder="Opcional">
+        </label>
+
+        <label>
+          Zona Eleitoral
+          <select name="zona_eleitoral" id="zona_eleitoral" required>
+            <option value="">Selecione...</option>
+            {% for zona in zona_options %}
+            <option value="{{ zona }}">{{ zona }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <label>
+          UF
+          <select name="uf" id="uf" required>
+            <option value="">Carregando UFs...</option>
+          </select>
+        </label>
+
+        <label class="col-2">
+          Município (IBGE)
+          <select name="municipio" id="municipio" required disabled>
+            <option value="">Selecione uma UF primeiro</option>
+          </select>
+        </label>
+
+        <label>
+          Naturalidade
+          <input name="naturalidade">
+        </label>
+        <label>
+          Nº do Título
+          <input name="titulo_eleitor">
+        </label>
+
+        <label>
+          Seção
+          <input name="secao">
+        </label>
+        <label>
+          Estado Civil
+          <select name="estado_civil" id="estado_civil">
+            <option value="">Selecione...</option>
+            {% for estado_civil in estado_civil_options %}
+            <option value="{{ estado_civil }}">{{ estado_civil }}</option>
+            {% endfor %}
+          </select>
+        </label>
+
+        <label>
+          Filiação (Pai)
+          <input name="pai">
+        </label>
+        <label>
+          Filiação (Mãe)
+          <input name="mae">
+        </label>
+
+        <label>
+          Endereço Residencial
+          <input name="endereco">
+        </label>
+        <label>
+          Bairro / Setor
+          <input name="bairro_setor">
+        </label>
+
+        <label>
+          CEP
+          <input name="cep" id="cep" placeholder="00000-000">
+        </label>
+        <label>
+          Email
+          <input name="email" type="email">
+        </label>
+
+        <label>
+          CPF
+          <input name="cpf" placeholder="000.000.000-00" inputmode="numeric">
+        </label>
+        <label>
+          RG
+          <input name="rg">
+        </label>
+
+        <label>
+          Profissão
+          <input name="profissao">
+        </label>
+        <label>
+          Celular / WhatsApp
+          <input name="celular_whatsapp">
+        </label>
+
+        <label class="col-2">
+          Rede Social
+          <input name="rede_social">
+        </label>
+
+        <label>
+          Data de Inscrição no Partido
+          <input type="date" name="data_inscricao">
+        </label>
+
+        <p class="status col-2" id="status-msg" aria-live="polite"></p>
+
+        <div class="actions col-2">
+          <button type="submit">Gerar PDF Preenchido</button>
+          <p class="hint">O PDF abrirá em nova aba, pronto para imprimir.</p>
+        </div>
+      </form>
+    </section>
+  </main>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
